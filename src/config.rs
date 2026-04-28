@@ -3,8 +3,12 @@ use dotenvy::from_filename;
 
 pub struct Config {
     pub github_token: String,
-    pub repo_owner: &'static str,
-    pub repo_name: &'static str,
+    pub repositories: Vec<Repository>,
+}
+
+pub struct Repository {
+    pub owner: &'static str,
+    pub name: &'static str,
 }
 
 impl Config {
@@ -13,8 +17,24 @@ impl Config {
 
         Ok(Self {
             github_token: std::env::var("GITHUB_TOKEN").context("missing GITHUB_TOKEN")?,
-            repo_owner: "zap-studio",
-            repo_name: "monorepo",
+            repositories: vec![
+                Repository {
+                    owner: "zap-studio",
+                    name: "monorepo",
+                },
+                Repository {
+                    owner: "atrtde",
+                    name: "todo-tree",
+                },
+                Repository {
+                    owner: "atrtde",
+                    name: "mntn",
+                },
+                Repository {
+                    owner: "atrtde",
+                    name: "feedyourai",
+                },
+            ],
         })
     }
 }
