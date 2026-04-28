@@ -1,4 +1,4 @@
-# GitHub Org Rank
+# forgs
 
 Ranks GitHub organizations related to a repository's stargazers.
 
