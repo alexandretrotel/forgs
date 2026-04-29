@@ -1,6 +1,6 @@
 mod client;
 mod orgs;
-mod progress;
+pub(crate) mod progress;
 mod stargazers;
 
 pub use client::GitHubClient;
