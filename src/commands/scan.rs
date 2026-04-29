@@ -5,7 +5,7 @@ use serde::Serialize;
 
 use crate::github::GitHubClient;
 use crate::github::progress::spinner;
-use crate::infra::output::writer::write_json;
+use crate::infra::output::writer::write_results;
 use crate::models::repository::Repository;
 use crate::services::token_store::GithubTokenStore;
 
@@ -56,7 +56,7 @@ pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<(
     }
 
     scan_progress.finish_and_clear();
-    write_json(&results, output.as_deref())?;
+    write_results(&results, output.as_deref())?;
 
     Ok(())
 }

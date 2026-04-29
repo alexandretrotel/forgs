@@ -4,7 +4,7 @@ use std::path::Path;
 use anyhow::{Context, Result};
 use serde::Serialize;
 
-pub fn write_json<T>(value: &T, output_path: Option<&Path>) -> Result<()>
+pub fn write_results<T>(value: &T, output_path: Option<&Path>) -> Result<()>
 where
     T: Serialize,
 {
