@@ -1,33 +1,62 @@
+use std::path::PathBuf;
+
 use anyhow::{Context, Result, anyhow};
+use serde::Serialize;
 
 use crate::github::GitHubClient;
-use crate::infra::output::writer::write_organizations;
+use crate::github::progress::spinner;
+use crate::infra::output::writer::write_json;
 use crate::models::repository::Repository;
 use crate::services::token_store::GithubTokenStore;
 
-pub async fn run(repositories: Vec<String>) -> Result<()> {
+#[derive(Serialize)]
+struct ScanResult {
+    repository: Repository,
+    organizations: Vec<crate::models::organization::OrganizationRank>,
+}
+
+pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<()> {
     if repositories.is_empty() {
         return Err(anyhow!(
             "missing repositories: pass one or more values like `forgs owner/name`"
         ));
     }
 
-    let token = GithubTokenStore::new()?.get()?;
+    let token_store = GithubTokenStore::new()?;
+    let token = token_store.get_optional()?;
+    let scan_progress = spinner("Preparing scan");
+
+    if token.is_none() {
+        scan_progress.set_message(
+            "No GitHub token configured. Continuing unauthenticated; rate limits may cause errors. `forgs token set <token>` is recommended.".to_string(),
+        );
+    }
+
     let github = GitHubClient::new(token)?;
+    let mut results = Vec::new();
 
     for repository in repositories
         .into_iter()
         .map(|value| parse_repository(&value))
         .collect::<Result<Vec<_>>>()?
     {
-        println!("Processing {}/{}...", repository.owner, repository.name);
+        scan_progress.set_message(format!(
+            "Processing {}/{}...",
+            repository.owner, repository.name
+        ));
 
         let organizations = github
             .rank_organizations_by_followers(&repository.owner, &repository.name)
             .await?;
 
-        write_organizations(&repository, &organizations)?;
+        results.push(ScanResult {
+            repository,
+            organizations,
+        });
     }
+
+    scan_progress.finish_and_clear();
+    write_json(&results, output.as_deref())?;
 
     Ok(())
 }
