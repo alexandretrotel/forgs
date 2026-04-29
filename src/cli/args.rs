@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
@@ -7,27 +9,23 @@ use clap::{Args, Parser, Subcommand};
     about = "A tool to scan famous organizations from a list of stargazers."
 )]
 pub struct Cli {
-    pub repositories: Vec<String>,
     #[command(subcommand)]
-    pub command: Option<Commands>,
+    pub command: Commands,
 }
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    Token(TokenArgs),
+    Scan(ScanArgs),
+    TokenSet(SetTokenArgs),
+    TokenDelete,
 }
 
 #[derive(Debug, Args)]
-pub struct TokenArgs {
-    #[command(subcommand)]
-    pub action: Option<TokenAction>,
-    pub token: Option<String>,
-}
+pub struct ScanArgs {
+    #[arg(short, long)]
+    pub output: Option<PathBuf>,
 
-#[derive(Debug, Subcommand)]
-pub enum TokenAction {
-    Set(SetTokenArgs),
-    Delete,
+    pub repositories: Vec<String>,
 }
 
 #[derive(Debug, Args)]
