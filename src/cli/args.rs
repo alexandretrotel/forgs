@@ -1,10 +1,15 @@
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Debug, Parser)]
-#[command(name = "forgs", version, about = "GitHub Token config for forgs")]
+#[command(
+    name = "forgs",
+    version,
+    about = "A tool to scan famous organizations from a list of stargazers."
+)]
 pub struct Cli {
+    pub repositories: Vec<String>,
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Option<Commands>,
 }
 
 #[derive(Debug, Subcommand)]

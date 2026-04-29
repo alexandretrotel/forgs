@@ -28,6 +28,12 @@ impl GithubTokenStore {
         Ok(())
     }
 
+    pub fn get(&self) -> Result<String> {
+        self.entry
+            .get_password()
+            .context("failed to read GitHub token from keyring")
+    }
+
     pub fn delete(&self) -> Result<()> {
         match self.entry.delete_credential() {
             Ok(()) => {
