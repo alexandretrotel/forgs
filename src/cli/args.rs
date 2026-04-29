@@ -18,7 +18,6 @@ pub struct Cli {
 pub enum Commands {
     Scan(ScanArgs),
     Token(TokenArgs),
-    Version,
 }
 
 #[derive(Debug, Args)]

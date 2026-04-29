@@ -12,9 +12,5 @@ pub async fn run(cli: Cli) -> Result<()> {
             TokenAction::Set(args) => token::set::run(args),
             TokenAction::Delete => token::delete::run(),
         },
-        Commands::Version => {
-            println!("{}", env!("CARGO_PKG_VERSION"));
-            Ok(())
-        }
     }
 }
