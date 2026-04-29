@@ -1,4 +1,5 @@
 use anyhow::Result;
+use indicatif::ProgressBar;
 use octocrab::Octocrab;
 
 const STARS_PER_PAGE: u8 = 100;
@@ -7,6 +8,7 @@ pub async fn fetch_stargazer_names(
     octocrab: &Octocrab,
     repo_owner: &str,
     repo_name: &str,
+    progress: &ProgressBar,
 ) -> Result<Vec<String>> {
     let mut stargazer_names = Vec::new();
     let mut page_num: u32 = 1;
@@ -34,7 +36,9 @@ pub async fn fetch_stargazer_names(
             stargazer_names.push(user.login);
         }
 
-        println!("Fetched stargazers: {}", stargazer_names.len());
+        if !progress.is_hidden() {
+            progress.set_message(format!("Fetching stargazers ({})", stargazer_names.len()));
+        }
 
         if page_len < STARS_PER_PAGE as usize {
             break;
