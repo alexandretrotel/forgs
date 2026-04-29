@@ -6,7 +6,8 @@ use clap::{Args, Parser, Subcommand};
 #[command(
     name = "forgs",
     version,
-    about = "A tool to scan the organizations behind a repository's stargazers."
+    about = "A tool to scan the organizations behind a repository's stargazers.",
+    arg_required_else_help = true
 )]
 pub struct Cli {
     #[command(subcommand)]
@@ -17,6 +18,7 @@ pub struct Cli {
 pub enum Commands {
     Scan(ScanArgs),
     Token(TokenArgs),
+    Version,
 }
 
 #[derive(Debug, Args)]
