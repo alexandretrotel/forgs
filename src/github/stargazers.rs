@@ -36,9 +36,7 @@ pub async fn fetch_stargazer_names(
             stargazer_names.push(user.login);
         }
 
-        if !progress.is_hidden() {
-            progress.set_message(format!("Fetching stargazers ({})", stargazer_names.len()));
-        }
+        progress.set_message(format!("Fetching stargazers ({})", stargazer_names.len()));
 
         if page_len < STARS_PER_PAGE as usize {
             break;
