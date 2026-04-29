@@ -12,8 +12,14 @@ pub struct GitHubClient {
 }
 
 impl GitHubClient {
-    pub fn new(token: String) -> Result<Self> {
-        let octocrab = Octocrab::builder().personal_token(token).build()?;
+    pub fn new(token: Option<String>) -> Result<Self> {
+        let mut builder = Octocrab::builder();
+
+        if let Some(token) = token {
+            builder = builder.personal_token(token);
+        }
+
+        let octocrab = builder.build()?;
         Ok(Self { octocrab })
     }
 
