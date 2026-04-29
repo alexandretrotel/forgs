@@ -6,7 +6,7 @@ use clap::{Args, Parser, Subcommand};
 #[command(
     name = "forgs",
     version,
-    about = "A tool to scan famous organizations from a list of stargazers."
+    about = "A tool to scan the organizations behind a repository's stargazers."
 )]
 pub struct Cli {
     #[command(subcommand)]
