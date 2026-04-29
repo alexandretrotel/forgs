@@ -1,25 +1,22 @@
 use std::collections::HashSet;
 
 use anyhow::Result;
+use indicatif::ProgressBar;
 use octocrab::{Octocrab, Page, models};
 
 use crate::models::organization::OrganizationRank;
-
-use super::progress::print_progress;
 
 const ORGS_PER_PAGE: u8 = 100;
 
 pub async fn fetch_unique_organization_names(
     octocrab: &Octocrab,
     stargazer_names: &[String],
+    progress: &ProgressBar,
 ) -> Result<Vec<String>> {
     let mut organization_names = HashSet::new();
-    let total_stargazers = stargazer_names.len();
-
-    println!("Fetching org memberships...");
-    for (index, stargazer_name) in stargazer_names.iter().enumerate() {
+    for stargazer_name in stargazer_names {
         organization_names.extend(fetch_user_organizations(octocrab, stargazer_name).await?);
-        print_progress("Org memberships", index + 1, total_stargazers);
+        progress.inc(1);
     }
 
     let mut organization_names: Vec<_> = organization_names.into_iter().collect();
