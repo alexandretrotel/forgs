@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 
 use anyhow::Result;
-use indicatif::ProgressBar;
 use octocrab::{Octocrab, Page, models};
 
+use super::progress::ProgressHandle;
 use crate::models::organization::OrganizationRank;
 
 const ORGS_PER_PAGE: u8 = 100;
@@ -11,7 +11,7 @@ const ORGS_PER_PAGE: u8 = 100;
 pub async fn fetch_unique_organization_names(
     octocrab: &Octocrab,
     stargazer_names: &[String],
-    progress: &ProgressBar,
+    progress: &ProgressHandle,
 ) -> Result<Vec<String>> {
     let mut organization_names = HashSet::new();
     for stargazer_name in stargazer_names {
