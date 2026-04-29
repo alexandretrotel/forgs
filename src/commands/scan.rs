@@ -4,7 +4,6 @@ use anyhow::{Context, Result, anyhow};
 use serde::Serialize;
 
 use crate::github::GitHubClient;
-use crate::github::progress::spinner;
 use crate::infra::output::writer::write_results;
 use crate::models::repository::Repository;
 use crate::services::token_store::GithubTokenStore;
@@ -24,13 +23,6 @@ pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<(
 
     let token_store = GithubTokenStore::new()?;
     let token = token_store.get_optional()?;
-    let scan_progress = spinner("Preparing scan");
-
-    if token.is_none() {
-        scan_progress.set_message(
-            "No GitHub token configured. Continuing unauthenticated; rate limits may cause errors. `forgs token set <token>` is recommended.".to_string(),
-        );
-    }
 
     let github = GitHubClient::new(token)?;
     let mut results = Vec::new();
@@ -40,11 +32,6 @@ pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<(
         .map(|value| parse_repository(&value))
         .collect::<Result<Vec<_>>>()?
     {
-        scan_progress.set_message(format!(
-            "Processing {}/{}...",
-            repository.owner, repository.name
-        ));
-
         let organizations = github
             .rank_organizations_by_followers(&repository.owner, &repository.name)
             .await?;
@@ -55,7 +42,6 @@ pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<(
         });
     }
 
-    scan_progress.finish_and_clear();
     write_results(&results, output.as_deref())?;
 
     Ok(())
