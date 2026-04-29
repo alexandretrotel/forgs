@@ -28,7 +28,7 @@ forgs token delete
 
 ## Notes
 
-- Without `--output`, results are printed to stdout.
+- Without `--output`, results are printed to stdout in a human-readable terminal format.
 - If `--output` points to a file, all results are written there as one JSON array.
 - If `--output` points to a directory, one file per repo is written as `owner-repo.json`.
 - Scans can run without a token, but GitHub rate limits may cause errors more quickly.
