@@ -16,8 +16,7 @@ pub struct Cli {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Scan(ScanArgs),
-    TokenSet(SetTokenArgs),
-    TokenDelete,
+    Token(TokenArgs),
 }
 
 #[derive(Debug, Args)]
@@ -26,6 +25,18 @@ pub struct ScanArgs {
     pub output: Option<PathBuf>,
 
     pub repositories: Vec<String>,
+}
+
+#[derive(Debug, Args)]
+pub struct TokenArgs {
+    #[command(subcommand)]
+    pub action: TokenAction,
+}
+
+#[derive(Debug, Subcommand)]
+pub enum TokenAction {
+    Set(SetTokenArgs),
+    Delete,
 }
 
 #[derive(Debug, Args)]
