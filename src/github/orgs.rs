@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use anyhow::Result;
 use octocrab::{Octocrab, Page, models};
 
-use crate::organization::OrganizationRank;
+use crate::models::organization::OrganizationRank;
 
 use super::progress::print_progress;
 

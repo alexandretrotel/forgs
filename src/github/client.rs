@@ -1,7 +1,7 @@
 use anyhow::Result;
 use octocrab::Octocrab;
 
-use crate::organization::OrganizationRank;
+use crate::models::organization::OrganizationRank;
 
 use super::orgs::{fetch_organization_rank, fetch_unique_organization_names};
 use super::progress::print_progress;
