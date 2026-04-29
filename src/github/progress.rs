@@ -1,10 +1,6 @@
 use indicatif::{ProgressBar, ProgressDrawTarget, ProgressStyle};
 
-pub fn spinner(enabled: bool, message: &str) -> ProgressBar {
-    if !enabled {
-        return ProgressBar::hidden();
-    }
-
+pub fn spinner(message: &str) -> ProgressBar {
     let progress = ProgressBar::with_draw_target(None, ProgressDrawTarget::stdout());
     progress.set_style(
         ProgressStyle::with_template("{spinner} {msg}")
@@ -15,11 +11,7 @@ pub fn spinner(enabled: bool, message: &str) -> ProgressBar {
     progress
 }
 
-pub fn progress_bar(enabled: bool, len: usize, message: &str) -> ProgressBar {
-    if !enabled {
-        return ProgressBar::hidden();
-    }
-
+pub fn progress_bar(len: usize, message: &str) -> ProgressBar {
     let progress = ProgressBar::with_draw_target(Some(len as u64), ProgressDrawTarget::stdout());
     progress.set_style(
         ProgressStyle::with_template("{bar:40.cyan/blue} {pos:>7}/{len:7} {msg}")
