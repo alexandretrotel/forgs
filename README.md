@@ -1,17 +1,32 @@
 # forgs
 
-Ranks GitHub organizations related to a repository's stargazers.
+A tool to scan the organizations behind a repository's stargazers.
 
-## Setup
-
-Create `.env.local`:
-
-```env
-GITHUB_TOKEN=your_token_here
-```
-
-## Run
+## Quick Start
 
 ```bash
-cargo run
+forgs token set <github-token>
+forgs scan owner/name
 ```
+
+## Installation
+
+```bash
+cargo install forgs
+```
+
+## Usage
+
+```bash
+forgs scan owner/name
+forgs scan owner/name other-owner/other-name
+forgs scan --output results.json owner/name
+forgs token set <github-token>
+forgs token delete
+```
+
+Scans can run without a token, but GitHub rate limits may cause errors more quickly.
+
+## License
+
+GPL-3.0. See [LICENSE](./LICENSE).
