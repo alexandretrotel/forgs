@@ -21,11 +21,17 @@ cargo install forgs
 forgs scan owner/name
 forgs scan owner/name other-owner/other-name
 forgs scan --output results.json owner/name
+forgs scan --output ./results owner/name other-owner/other-name
 forgs token set <github-token>
 forgs token delete
 ```
 
-Scans can run without a token, but GitHub rate limits may cause errors more quickly.
+## Notes
+
+- Without `--output`, results are printed to stdout.
+- If `--output` points to a file, all results are written there as one JSON array.
+- If `--output` points to a directory, one file per repo is written as `owner-repo.json`.
+- Scans can run without a token, but GitHub rate limits may cause errors more quickly.
 
 ## License
 
