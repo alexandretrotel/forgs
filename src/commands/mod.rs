@@ -7,7 +7,8 @@ use crate::cli::args::{Cli, Commands};
 
 pub async fn run(cli: Cli) -> Result<()> {
     match cli.command {
-        Some(Commands::Token(args)) => token::run(args),
-        None => scan::run(cli.repositories).await,
+        Commands::Scan(args) => scan::run(args.repositories, args.output).await,
+        Commands::TokenSet(args) => token::set::run(args),
+        Commands::TokenDelete => token::delete::run(),
     }
 }
