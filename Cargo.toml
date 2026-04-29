@@ -1,6 +1,6 @@
 [package]
 name = "forgs"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "A tool to scan the organizations behind a repository's stargazers."
 license-file = "LICENSE"
