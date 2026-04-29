@@ -1,18 +1,12 @@
 use std::path::PathBuf;
 
 use anyhow::{Context, Result, anyhow};
-use serde::Serialize;
 
 use crate::github::GitHubClient;
 use crate::infra::output::writer::write_results;
 use crate::models::repository::Repository;
+use crate::models::scan_result::ScanResult;
 use crate::services::token_store::GithubTokenStore;
-
-#[derive(Serialize)]
-struct ScanResult {
-    repository: Repository,
-    organizations: Vec<crate::models::organization::OrganizationRank>,
-}
 
 pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<()> {
     if repositories.is_empty() {
