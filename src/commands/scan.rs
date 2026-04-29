@@ -42,13 +42,25 @@ pub async fn run(repositories: Vec<String>, output: Option<PathBuf>) -> Result<(
 }
 
 fn parse_repository(value: &str) -> Result<Repository> {
-    let (owner, name) = value
-        .split_once('/')
-        .context("repository must be formatted as owner/name")?;
+    let repository = value.trim().trim_end_matches('/');
+    let repository = repository
+        .strip_prefix("https://github.com/")
+        .or_else(|| repository.strip_prefix("http://github.com/"))
+        .or_else(|| repository.strip_prefix("github.com/"))
+        .unwrap_or(repository);
+
+    let mut segments = repository.split('/').filter(|segment| !segment.is_empty());
+    let owner = segments
+        .next()
+        .context("repository must be formatted as owner/name or be a GitHub repository URL")?;
+    let name = segments
+        .next()
+        .context("repository must be formatted as owner/name or be a GitHub repository URL")?;
+    let name = name.trim_end_matches(".git");
 
     if owner.is_empty() || name.is_empty() {
         return Err(anyhow!(
-            "repository `{value}` must be formatted as owner/name"
+            "repository `{value}` must be formatted as owner/name or be a GitHub repository URL"
         ));
     }
 
