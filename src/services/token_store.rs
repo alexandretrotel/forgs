@@ -19,6 +19,16 @@ impl GithubTokenStore {
         Ok(Self { entry })
     }
 
+    pub fn get_optional(&self) -> Result<Option<String>> {
+        match self.entry.get_password() {
+            Ok(token) => Ok(Some(token)),
+            Err(KeyringError::NoEntry) => Ok(None),
+            Err(error) => {
+                Err(anyhow::Error::new(error).context("failed to read GitHub token from keyring"))
+            }
+        }
+    }
+
     pub fn set(&self, token: &str) -> Result<()> {
         self.entry
             .set_password(token)
@@ -26,12 +36,6 @@ impl GithubTokenStore {
 
         println!("Stored GitHub token in keyring.");
         Ok(())
-    }
-
-    pub fn get(&self) -> Result<String> {
-        self.entry
-            .get_password()
-            .context("failed to read GitHub token from keyring")
     }
 
     pub fn delete(&self) -> Result<()> {
