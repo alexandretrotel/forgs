@@ -1,6 +1,7 @@
 use anyhow::Result;
-use indicatif::ProgressBar;
 use octocrab::Octocrab;
+
+use super::progress::ProgressHandle;
 
 const STARS_PER_PAGE: u8 = 100;
 
@@ -8,7 +9,7 @@ pub async fn fetch_stargazer_names(
     octocrab: &Octocrab,
     repo_owner: &str,
     repo_name: &str,
-    progress: &ProgressBar,
+    progress: &ProgressHandle,
 ) -> Result<Vec<String>> {
     let mut stargazer_names = Vec::new();
     let mut page_num: u32 = 1;
