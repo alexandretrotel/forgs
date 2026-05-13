@@ -7,6 +7,16 @@ on:
   pull_request:
 
 jobs:
+  unused-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Machete
+        uses: bnjbvr/cargo-machete@main
+
   rust:
     runs-on: ubuntu-latest
 
