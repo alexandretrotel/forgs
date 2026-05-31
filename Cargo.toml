@@ -4,7 +4,7 @@ version = "0.1.1"
 edition = "2024"
 description = "A tool to scan the organizations behind a repository's stargazers."
 license-file = "LICENSE"
-repository = "https://github.com/atrtde/forgs"
+repository = "https://github.com/alexandretrotel/forgs"
 
 [[bin]]
 name = "forgs"
